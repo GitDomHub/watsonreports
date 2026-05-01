@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watson Diagnostic Report: Norsoft Homepage</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #EEF2F7;
+      --surface: #FFFFFF;
+      --surface-hover: #F8FAFC;
+      --border: #D6DEE8;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --shadow: 0 2px 12px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.06);
+      --hot-pink: #FF4D8D;
+      --velvet-plum: #9B5DE5;
+      --golden-honey: #FBBA2C;
+      --studio-aqua: #5CECC6;
+      --money-green: #10B981;
+      --pain-red: #EF4444;
+      --watson-blue: #4B9FE1;
+      --carbon: #475569;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0F172A;
+      --surface: #1a2332;
+      --surface-hover: #222e42;
+      --border: #2a3749;
+      --text-primary: #E8E4DF;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    [data-theme="dark"] .header { background: rgba(15,23,42,0.92); }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-watson-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--watson-blue); filter: sepia(15%); flex-shrink: 0; }
+    .header-brand { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--watson-blue); letter-spacing: 0.04em; }
+    .header-center { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 14px; font-size: 0.8rem; cursor: pointer; color: var(--text-secondary); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .header-btn:hover { border-color: var(--watson-blue); color: var(--watson-blue); }
+
+    /* LAYOUT */
+    .page-wrap { display: flex; max-width: 1100px; margin: 0 auto; padding: 100px 24px 60px; gap: 32px; }
+    .sidebar { position: sticky; top: 80px; width: 220px; flex-shrink: 0; height: fit-content; }
+    .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+    .sidebar-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+    .nav-item { display: block; padding: 9px 14px; border-radius: 8px; font-size: 0.83rem; color: var(--text-secondary); text-decoration: none; transition: all 0.15s; border-left: 3px solid transparent; }
+    .nav-item:hover { background: var(--surface-hover); color: var(--text-primary); }
+    .nav-item.active { color: var(--hot-pink); border-left-color: var(--hot-pink); background: rgba(255,77,141,0.06); }
+    .main { flex: 1; min-width: 0; }
+
+    @media (max-width: 800px) {
+      .sidebar { display: none; }
+      .page-wrap { padding-top: 90px; }
+    }
+
+    /* CASE BANNER */
+    .case-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 36px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .case-meta { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .case-badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(75,159,225,0.1); color: var(--watson-blue); border: 1px solid rgba(75,159,225,0.25); border-radius: 100px; padding: 5px 14px; }
+    .case-badge.status-badge { background: rgba(16,185,129,0.1); color: var(--money-green); border-color: rgba(16,185,129,0.25); }
+    .case-subject { font-family: 'League Spartan', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 8px; }
+    .pink { color: var(--hot-pink); }
+    .case-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; }
+    .classification-pill { display: inline-block; background: rgba(255,77,141,0.08); border: 1px solid rgba(255,77,141,0.2); color: var(--hot-pink); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; }
+
+    /* SECTIONS */
+    .section { margin-bottom: 24px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(75,159,225,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-icon svg { width: 20px; height: 20px; }
+    .section-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--watson-blue); margin-bottom: 3px; }
+    .section-header h2 { font-family: 'League Spartan', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.01em; }
+
+    /* SCORE HERO */
+    .score-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: var(--shadow); }
+    .score-hero { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .score-ring-wrap { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+    .score-ring-wrap svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .ring-fill { fill: none; stroke: var(--pain-red); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
+    .score-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .score-num { font-family: 'League Spartan', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--pain-red); line-height: 1; }
+    .score-denom { font-size: 0.85rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .score-summary { flex: 1; }
+    .score-label { font-family: 'League Spartan', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--pain-red); margin-bottom: 10px; }
+    .score-note { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 18px; font-style: italic; }
+    .score-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .score-meta span { font-size: 0.78rem; font-weight: 600; background: var(--surface-hover); border: 1px solid var(--border); padding: 5px 12px; border-radius: 100px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+
+    /* SILENT DRAIN */
+    .drain-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .section-intro { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.75; margin-bottom: 24px; }
+    .drain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .drain-card { background: var(--surface-hover); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow); }
+    .drain-card.drain-highlight { border-color: var(--money-green); background: rgba(16,185,129,0.04); }
+    .drain-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .drain-num { font-family: 'League Spartan', sans-serif; font-size: 2.6rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .drain-bad { color: var(--pain-red); }
+    .drain-good { color: var(--money-green); }
+    .drain-context { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; }
+    .drain-note { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+    @media (max-width: 600px) { .drain-grid { grid-template-columns: 1fr; } }
+
+    /* TRIGGERS */
+    .triggers-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .triggers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 650px) { .triggers-grid { grid-template-columns: 1fr; } }
+    .trigger-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; box-shadow: var(--shadow); border-left: 4px solid var(--border); transition: border-color 0.2s; }
+    .trigger-card.critical { border-left-color: var(--pain-red); }
+    .trigger-card.weak { border-left-color: var(--golden-honey); }
+    .trigger-card.strong { border-left-color: var(--money-green); }
+    .trigger-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .trigger-name { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+    .trigger-score { font-family: 'JetBrains Mono', monospace; }
+    .score-digit { font-size: 1.2rem; font-weight: 700; }
+    .trigger-card.critical .score-digit { color: var(--pain-red); }
+    .trigger-card.weak .score-digit { color: var(--golden-honey); }
+    .trigger-card.strong .score-digit { color: var(--money-green); }
+    .score-max { font-size: 0.78rem; color: var(--text-muted); }
+    .trigger-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 10px 0 10px; overflow: hidden; }
+    .trigger-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .trigger-card.critical .trigger-fill { background: var(--pain-red); }
+    .trigger-card.weak .trigger-fill { background: var(--golden-honey); }
+    .trigger-card.strong .trigger-fill { background: var(--money-green); }
+    .trigger-status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; margin-bottom: 10px; }
+    .critical .trigger-status-pill { background: rgba(239,68,68,0.1); color: var(--pain-red); }
+    .weak .trigger-status-pill { background: rgba(251,186,44,0.1); color: #b08000; }
+    .strong .trigger-status-pill { background: rgba(16,185,129,0.1); color: var(--money-green); }
+    .trigger-note { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ISSUES */
+    .issues-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .issue-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px 28px; box-shadow: var(--shadow); margin-bottom: 16px; }
+    .issue-card:last-child { margin-bottom: 0; }
+    .issue-num { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+    .issue-title { font-family: 'League Spartan', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--pain-red); margin-bottom: 14px; }
+    .issue-quote { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: rgba(239,68,68,0.06); border-left: 3px solid var(--pain-red); padding: 12px 16px; border-radius: 0 8px 8px 0; color: var(--text-primary); margin-bottom: 14px; line-height: 1.6; }
+    .issue-explain { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 14px; }
+    .issue-impact { display: flex; gap: 10px; align-items: center; padding-top: 14px; border-top: 1px solid var(--border); font-size: 0.82rem; }
+    .impact-label { color: var(--text-muted); }
+    .impact-val { color: var(--watson-blue); font-weight: 600; }
+
+    /* WATSON NOTES */
+    .notes-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .watson-note-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--shadow); border-left: 5px solid var(--watson-blue); }
+    .watson-note-header { display: flex; gap: 16px; align-items: center; margin-bottom: 22px; }
+    .watson-img-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--watson-blue); flex-shrink: 0; filter: sepia(20%); }
+    .watson-name { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1.05rem; color: var(--text-primary); }
+    .watson-role { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+    .watson-note-body p { font-size: 0.95rem; line-height: 1.75; color: var(--text-primary); }
+    .watson-note-body p + p { margin-top: 12px; }
+    .watson-note-footer { display: flex; justify-content: space-between; padding-top: 18px; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-muted); margin-top: 22px; }
+    .watson-sig { font-family: 'JetBrains Mono', monospace; color: var(--watson-blue); font-weight: 500; }
+
+    /* FROM THE CREATOR */
+    .creator-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .creator-card { background: var(--surface-hover); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; box-shadow: var(--shadow); border-left: 5px solid var(--velvet-plum); }
+    .creator-header { display: flex; gap: 14px; align-items: center; margin-bottom: 20px; }
+    .creator-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--velvet-plum); flex-shrink: 0; }
+    .creator-name { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1.05rem; color: var(--text-primary); }
+    .creator-role { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+    .creator-body p { font-size: 0.92rem; line-height: 1.75; color: var(--text-secondary); }
+    .creator-body p + p { margin-top: 11px; }
+    .social-links { display: flex; align-items: center; gap: 8px; margin-top: 7px; flex-wrap: wrap; }
+    .social-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.73rem; font-weight: 600; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); transition: all 0.15s; background: var(--surface); }
+    .social-link svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .social-link.li:hover { border-color: #0077B5; color: #0077B5; background: rgba(0,119,181,0.06); }
+    .social-link.ig:hover { border-color: #E1306C; color: #E1306C; background: rgba(225,48,108,0.06); }
+
+    /* SHERLOCK CTA */
+    .sherlock-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px; box-shadow: var(--shadow); }
+    .sherlock-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hover) 100%); border: 1px solid var(--border); border-radius: 20px; padding: 48px; box-shadow: var(--shadow); text-align: center; }
+    .sherlock-badge { display: inline-block; background: rgba(255,77,141,0.12); color: var(--hot-pink); border: 1px solid var(--hot-pink); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 20px; }
+    .sherlock-card h2 { font-family: 'League Spartan', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 18px; line-height: 1.2; }
+    .sherlock-card > p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; max-width: 520px; margin: 0 auto 24px; }
+    .sherlock-bullets { display: flex; flex-direction: column; gap: 12px; text-align: left; max-width: 460px; margin: 0 auto 32px; }
+    .sherlock-bullet { display: flex; align-items: flex-start; gap: 12px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; }
+    .bullet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hot-pink); flex-shrink: 0; margin-top: 7px; }
+    .sherlock-btn { display: inline-block; background: var(--hot-pink); color: white; font-family: 'League Spartan', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; padding: 16px 36px; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(255,77,141,0.35); }
+    .sherlock-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,77,141,0.45); }
+
+    /* FOOTER */
+    .report-footer { text-align: center; padding: 32px 24px; font-size: 0.78rem; color: var(--text-muted); }
+    .footer-social { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-social .social-link { font-size: 0.79rem; padding: 6px 14px; }
+
+    @media print {
+      .header { position: relative; }
+      .sidebar { display: none; }
+      .page-wrap { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- FIXED HEADER -->
+<div class="header">
+  <div class="header-left">
+    <img class="header-watson-img" src="data:image/webp;base64,UklGRlAMAABXRUJQVlA4IEQMAADQLgCdASpwAHAAPpE6lkglpychMlpOcLASCWUAzuTCB1hg/an+f8EfG38hj5uBOod3V/x/W7/W97vyL1CPau8GgC7rH6bzW+zms0ed+wN+g/WA/1fIZ9c+wf+wfpueyT92vZt/Yd4LIzMx9KZye7+F6+TBEIamPICvC8Ks6ODBnnS299ns1lhBrmuW3t/2VkVrR2GZ/HOyxc3ss4bUXkV7GGTxShAenSYI07EdBkkOozttmFzITKV5T++g/8di4DL05nwjdupiCxAOxrKOm+qFWT6LFP+EsRaJULDbOQ70JXlaSZzoSPQJ4GDrpWEY0BoJnpjvvXcATP6uvl9KyOoxIgkmPNh1DWoTNXxmIPh7QGWjQLIMwtdKywZZrt3OUMMTw3qgvxGQYlXo2vw5irzk4bqxHoXYYFP2a5cdbnWkueR736CNlZM0Cc7KGju38VQXflMBtZlVTK7PMfrTUObvSurWwVsFqdnYi7rpggAdbsxwTudxComknjzvNsCJAAD+/XZ4KJwL07KwMZnm1VDWGyWxzvn5RcWCpYvN3F6Hh+qvjiKvsSZBpXxmInf5/ra0X0hJ67qQg/DgaIweqHySZu3KMJ1qGtnAloMmCv91/PZe1g8n2sSEoEcGkiJ0tEHL2Ie1XICHQjg7v7GEayshtE0xl1K8FsNqGrh0CPCsQ76L8Nu2KafXNgd0bqPJaNsebdu2Hsun4eIHF5UQKharfdhNzqIKvC553WWmMvJen6BKq5CFScUV4cwkdToxnTezoI4L4OTCXw/FA7IpP/Yt63TIYdE7GyjwKrj//LRZKQTzUBJBVSqbX2HZgzfFZ9CBLSq6k6mXmraeRrd+rcDt6U+IRq1AbsJemPVE0I+Ohn2NKNyHAGFt7YJ1eIDEKz6ROP6LNmOAy56asTB6sEwSXIXRXD5cm2RXqePjL0T97Rp3z4nzoWOwdQKc2riUFZ9Jmp3GURwHeM52kwaMNEYA9XqyomZLjtwDgPhXu1U3GWm6+Zbd48dQnNxOM2bw/j8gwkveAuK44yHbYiy6Bfqui47mDEDuwdyBkwCJTN+1qcedZFzPWBZseO1EXe5zESdIkwDJolI/55elkBO5c55wsj1ehhsrbbhtlfwbxIB771MbC7aGDfoMIohGsvAVwPf4U3R4aM7tT5DRXXBUHiwZK9q7hjCQ3eu+95pGN0akhRWp7QKyb4Q2t5Fzu6QF20qu9t3z/4oQF0XjALuDt1gTGRrHBF3EQeqsbB5WBkd+Vey/Tv3d91gVgpuCX3iJTh89YBgj1YH47h0J/39S0L/ivq522yov1YW36entv7NhX3tIaAMomG16LtAu9614feWGPKc9hC+YI+lgBzEA2Y2n8Qp77rNJ/Pey+ZxTfM8PnZ6PzbTvUm+zGSSYXkXEZEemrcVVkbeoWfusa59Mi0+EcK4G8rUBcvLB4JDN3XbGuENsSid2k/qvN+qDh4r/oW3GAUYEKmFfmbhib+dsrFf9iKpQDptemd/7T6m+5y/+j5FXXkH1dM/GVKGpFw76ycRYil8AHjunHhSQs/iij/aieunnvSH8FzWEJE0NtbHCy2YFwqVEfu/x24kifTphX3pu68BjegkaiZ+LvxEBjxKcGshlj8xQ8JAE7DD063ZjFy7JyGqFTirRXP2ayEVBA/0afYedEqnuLyavfxn7QfftA32Az4weACtNovP17L67NedpJtv0q30DYIVIgTG0s/lf5u1LhqeV2K4pB0anXFAKFVT7bXX/Y4FO2g8MF9a1xjjidjSvjYErxmhUBYqCJGZwyLbwfE4hqVAdrVlgHpyGsueZ47Nyiuo0mQeLvqCPqHVSSOASjTaQVcRtPJSIEeGZmBNmzbsNk6bR37PfS1iZtCHW2MDofIifO+ptFbQNgl32WmOwtDBQwMBxSq4aGqihUenjB7jVDMjT7zT3exSAXjgPMovsZu8qHuVrVUoMLa6OQGzt5Fp8dx65wNZfTcfzFvWVy52tG1euxE8ULiwiCR6M2GoapsAcvu5rBJtohHnlNzzsrVBSoKZIn9SfRGSaHQQMv0lCSsPkkV5hQvj10z+hbLFUidmnd7xycW+Bx1NMPCgEdwwyqarrVTvSirHsDqrbCzfDMa5S8r3YkiWY8QDlZjllQ17jFe+CscH5IY27XlIfhLDRrkOvCeOHyBjxKR2AQMdT1icNVnLUlRppdcWTw9QI/OzDXbWE/vO88113WN2SCIZcGeZUzcjjhX8kj4T0hPqAy3M8uYxavIoNax+ZwOJtZ3KoTp8MUSVdEVA8DMR4Zug1qy4pE0xcpuvbbMU727Q3s/KgQffFq6TJ6fcnsZuDWNbrmmoUkyPuifKpnkOlAbw09Ggqn/NaO286tcE6MyRfug/upc9yhaYHQXKK9hfIc+0FGN9fsVN8g2E1LQJjLYW+x8jyqqQkwzCfopr4L7iu5x1Ab6C28htA5GtvENhBjlZfNJuo+tLwq+wRP/3eb235V4AbZgy1mnSiLwbDndQaeufrq9kLNqlIbLgBO4qkG5TvxUx5j3YSK2Mx1ZokTdUrz13owSB+L7H5IDzCv9iBo5Y+9bBc/Hk8DZeoGGN2VSu3xFdvwCObIv1eDkTYLD2VxHoWBMgmYimtDKG3Xi/Ny3ilOpdvc0xFDpN7cr8Wlbw7Kjl4CSN7N+4uE4AKlbIt4wS86Za0JW6ojtVswr9rqNIdWMLl6UvG2qzizQO9eU1hJppm3GTNORzdcrzuoiKuzcRMNhOEbw9xGTwkBapjOhw5R3pA2r8G6Gem/Ms4iEchaB2hEy0hgkiBry0KuXeDqd+fg1acLIY5VYUxMRaPWEx3XVJ5o7TpgTMfufO3yViFbOvoARa4/cXYx8jE6Kf4K4STXC0+HW/ZJra+TMQNVWqltJbRMl3mcup3YmCAbDAopqtz2tNeNaOkX45lSG7GBfd6BmX4duo5n+JqQuP1JWAR86/njdn72m9tbNdFzt+ODZRi+OburLhnqMcaXJ1jQiUyp6ETL79y5VFN6mR4utLTVaQa7lktxTvzp4tjJMWW8/BhxkgmNLl0zW/aOVEdtZWBBgvYGYtwAIpq3EsMcgQMvge6/JGaoJDDxruecqwILd26OvbTX5hBibk5NssWBAV2siZ7bYoobKFphf2zBi8sopx+EBua6l2FA2HbaMIbKj9S6zoCGvxhOWBTWX6ZtyS1t7Hh2q1iDXfVq8s+/3/p0g3Osm0U6S+yCCOPi4/GrjyiD1T+YVkf427yg2o21oC3iaMkQRlNBQvsrcH2JZcBVBn9jyH1EE1Ghicn+g0YPu9AcN1mcplZXakkrogt8G++NU5i//f/dmnwHVPULvorhXnppcedCTODppG1WwPGPU4i0mPBmpBNkqT1xnF6v34SShTKG6C3njgtzujvrXgnYkeC4P83MfxCNpUZwrvnzwfWIQZjE4sUqaOT2/ePuEsfBhsZ9W/fCRknBQNpbfGJlxFEj8H9rh/mj89SzpK9HmxJjlJH6GUgVZ9CMWfZE/TYw90YmqzhkI30FVMey4nsPP00uGittWOM9kWLDC8C0dR9H65wC2DjAMD+IKNXXRBxPGy80gmnh6XWe5AT9UU7WC0snOhSfbrC8u59o6o+cU77Vw1srpSUtibELeA596hPGFsQIJiEearXq5lW1d9G48HvndZx7X05azXt94KVNxA7BT6oAIWu+cGpnOEkkhgsu+9wybi05E9rjfjdy/2Xz9SrgooEyOzGJYg3oTV4FXBP5ooDN9EmkXfD0NNZoD5qaMZrboeX9yyD2bB5DxHt1oi19OTWD05asmMIDctqeFyspYo0MV35djj/ldSaUY6COVLpe5aZEAybUXpLpLIn3EL0q0FkCEojjshizOfAgvNni0vg6tHKeUDUVd2oeiMMlPoMw7uWGy+92D84KArSml3n9nGAQad+yeUwuJJOIcZG21IxxB8Ftw7ColijYSp3YDvi5ubM7pqyHC8bP6OnJXMiRNe0xpNQQ4KhwHjcwRvkNXpn8lkHAH13QAFPKCPo6czxpmUQ+owbsvA+ssg0/lzEwKJazxeHAJpxU0iW7SNXuUZiSLJWcOXIATT4uteIzTszt98HUJHMKpGYblBwlAf+xG/qgU/WvxrkGOY1qp+QUMZyasJh322AQw/nFmWZRaD9HRI10vMxpQA8TSkBFc8oer4YotMYAA==" alt="Watson" />
+    <span class="header-brand">WATSON</span>
+  </div>
+  <div class="header-center">Marketing Health Check &nbsp;&bull;&nbsp; Case #847293 &nbsp;&bull;&nbsp; 1 May 2026</div>
+  <div class="header-right">
+    <button class="header-btn" id="theme-toggle">🌙</button>
+    <button class="header-btn" onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Navigation</div>
+      <a class="nav-item active" href="#score" data-section="score">Overall Score</a>
+      <a class="nav-item" href="#drain" data-section="drain">The Silent Drain</a>
+      <a class="nav-item" href="#triggers" data-section="triggers">7 Triggers</a>
+      <a class="nav-item" href="#issues" data-section="issues">Issues Found</a>
+      <a class="nav-item" href="#notes" data-section="notes">Watson's Notes</a>
+      <a class="nav-item" href="#creator" data-section="creator">From the Creator</a>
+      <a class="nav-item" href="#sherlock" data-section="sherlock">Next Step: Sherlock</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- CASE BANNER -->
+    <div class="case-banner">
+      <div class="case-meta">
+        <span class="case-badge">Case #847293 &mdash; 1 May 2026</span>
+        <span class="case-badge status-badge">Diagnostic Complete</span>
+      </div>
+      <h1 class="case-subject">Copy Analysis: <span class="pink">Norsoft Homepage</span></h1>
+      <p class="case-desc">norsoft.com &nbsp;&bull;&nbsp; Landing Page / Homepage</p>
+      <div class="classification-pill">Psychological Conversion Audit — 7 Triggers</div>
+    </div>
+
+    <!-- SECTION 00: OVERALL SCORE -->
+    <section id="score" class="section">
+      <div class="score-section">
+        <div class="score-hero">
+          <div class="score-ring-wrap">
+            <svg viewBox="0 0 120 120" width="140" height="140">
+              <circle class="ring-bg" cx="60" cy="60" r="52" />
+              <circle class="ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7" />
+            </svg>
+            <div class="score-inner">
+              <div class="score-num">1.7</div>
+              <div class="score-denom">/5.0</div>
+            </div>
+          </div>
+          <div class="score-summary">
+            <div class="score-label">Critical</div>
+            <p class="score-note">"Competent. Tidy. Forgettable. Which is the most expensive kind of copy there is."</p>
+            <div class="score-meta">
+              <span>3 issues found</span>
+              <span>5 triggers critical</span>
+              <span>Homepage submitted</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 00b: THE SILENT DRAIN -->
+    <section id="drain" class="section">
+      <div class="drain-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--watson-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22a7 7 0 0 1-7-7c0-2 1-3.9 3-5.5s3.5-4 4-6.5c.5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 0 1-7 7z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="section-num">Section 00b</div>
+            <h2>The Silent Drain</h2>
+          </div>
+        </div>
+        <p class="section-intro">Quick one: are you running paid ads, or does most of your new business come through referrals and word of mouth? Here's what the gap looks like either way. The copy as it stands converts cold visitors into inquiries at roughly 1%. Buyer language copy for a dev agency typically sits at 3-4%. At an average engagement of $30,000, here's what that costs you.</p>
+        <div class="drain-grid">
+          <div class="drain-card">
+            <div class="drain-label">Current (Generic Copy)</div>
+            <div class="drain-num drain-bad">$60K</div>
+            <div class="drain-context">estimated monthly revenue leak</div>
+            <p class="drain-note">With 200 unique visitors and 1% conversion at $30K per project, you're closing 2 deals. Generic copy that sounds like an agency wrote it about itself leaves money on the table with every session.</p>
+          </div>
+          <div class="drain-card drain-highlight">
+            <div class="drain-label">With Buyer Language Copy</div>
+            <div class="drain-num drain-good">+$60K</div>
+            <div class="drain-context">recovered monthly at 3% conversion</div>
+            <p class="drain-note">The same 200 visitors. The same ads budget. Six deals instead of two. The only thing that changed was the words on the other side of the click.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 01: 7 TRIGGERS -->
+    <section id="triggers" class="section">
+      <div class="triggers-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--watson-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
+          <div>
+            <div class="section-num">Section 01</div>
+            <h2>7 Psychological Triggers</h2>
+          </div>
+        </div>
+
+        <div class="triggers-grid">
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Emotional Trigger Strength</div>
+              <div class="trigger-score"><span class="score-digit">1</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:20%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">The headline "Modern Systems, Old School Reliability" is a positioning statement, not an emotional hook. There's no fear activated, no desire named, no stakes anywhere on the page.</p>
+          </div>
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Buyer Language Accuracy</div>
+              <div class="trigger-score"><span class="score-digit">2</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:40%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">"Senior-Led Delivery," "Legacy System Modernisation," "Custom ERP Solutions" — this is how engineers describe their work, not how a frustrated business owner searches for a solution.</p>
+          </div>
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Pain Point Clarity</div>
+              <div class="trigger-score"><span class="score-digit">2</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:40%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">The SaaS escape calculator hints at a real pain (software subscription bloat), but the copy never names it directly. Pain is implied through a tool, not stated through words.</p>
+          </div>
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Identity Confirmation</div>
+              <div class="trigger-score"><span class="score-digit">2</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:40%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">The page speaks to no one specifically. "Organizations We've Worked With" covers healthcare, e-commerce, and ERP in one breath. The buyer has no moment where they feel seen.</p>
+          </div>
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Psychological Tripwire Activation</div>
+              <div class="trigger-score"><span class="score-digit">1</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:20%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">No urgency anywhere. No risk reversal. No reason this buyer should move now rather than next quarter. The page is entirely passive.</p>
+          </div>
+
+          <div class="trigger-card weak">
+            <div class="trigger-top">
+              <div class="trigger-name">Trust Signal Density</div>
+              <div class="trigger-score"><span class="score-digit">3</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:60%"></div></div>
+            <div class="trigger-status-pill">🟡 Weak</div>
+            <p class="trigger-note">Case studies exist and the client logos are there, but they're buried below the fold. The $590K SaaS savings calculator is genuinely interesting. It just needs to be higher up and given more weight.</p>
+          </div>
+
+          <div class="trigger-card critical">
+            <div class="trigger-top">
+              <div class="trigger-name">Urgency / Consequence Framing</div>
+              <div class="trigger-score"><span class="score-digit">1</span><span class="score-max">/5</span></div>
+            </div>
+            <div class="trigger-bar"><div class="trigger-fill" style="width:20%"></div></div>
+            <div class="trigger-status-pill">🔴 Critical</div>
+            <p class="trigger-note">"Start Your Project" and "Explore Our" are passive CTAs. No cost of inaction is named. No timeline pressure. The buyer has every reason to save this tab and never come back.</p>
+          </div>
+
+        </div>
+
+        <div style="margin-top:20px; background:var(--surface-hover); border:1px solid var(--border); border-radius:10px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <span style="font-size:0.82rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">Overall Score</span>
+          <span style="font-family:'League Spartan',sans-serif; font-weight:800; font-size:1.6rem; color:var(--pain-red);">1.7 / 5.0 ⭐</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02: ISSUES FOUND -->
+    <section id="issues" class="section">
+      <div class="issues-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--pain-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <div class="section-num">Section 02</div>
+            <h2>Issues Found</h2>
+          </div>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-num">Issue #1</div>
+          <div class="issue-title">The Headline Talks About Norsoft, Not the Buyer</div>
+          <div class="issue-quote">"Modern Systems, Old School Reliability"</div>
+          <p class="issue-explain">Your buyer isn't thinking about your reliability. They're thinking about their problem: being stuck with software that costs too much, breaks during critical moments, or does 60% of what the business actually needs. This headline tells them what you believe about yourselves. That's not why they came. They came because something is broken.</p>
+          <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Emotional Trigger Strength</span></div>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-num">Issue #2</div>
+          <div class="issue-title">Service Names Are Developer Language, Not Buyer Language</div>
+          <div class="issue-quote">"Legacy System Modernisation · Custom ERP Solutions · Cloud Service &amp; Migration · IT Consulting &amp; Strategy"</div>
+          <p class="issue-explain">Your buyer doesn't wake up thinking "I need legacy system modernisation." They wake up thinking "half my team is manually re-entering data between two systems that don't talk to each other, and my CFO is asking why IT costs keep climbing." When your service names sound like a technical dictionary, the buyer can't connect what you do to the pain they're feeling.</p>
+          <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Buyer Language Accuracy + Identity Confirmation</span></div>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-num">Issue #3</div>
+          <div class="issue-title">The CTAs Have No Stakes</div>
+          <div class="issue-quote">"Start Your Project · Explore Our · Have An Idea to Discuss?"</div>
+          <p class="issue-explain">These ask the buyer to take action without giving them a reason to do it now. A buyer with a real problem needs to feel that delay is costing them. "Start Your Project" is a polite invitation. It doesn't acknowledge what they're losing every month by staying on the current system. No cost of waiting, no consequence of inaction, no urgency.</p>
+          <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Urgency / Consequence Framing</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 03: WATSON'S NOTES -->
+    <section id="notes" class="section">
+      <div class="notes-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--watson-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="section-num">Section 03</div>
+            <h2>Watson's Notes</h2>
+          </div>
+        </div>
+        <div class="watson-note-card">
+          <div class="watson-note-header">
+            <img class="watson-img-avatar" src="data:image/webp;base64,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" alt="Watson" />
+            <div>
+              <div class="watson-name">Watson</div>
+              <div class="watson-role">Copy Diagnostician &nbsp;&bull;&nbsp; Just Digital</div>
+            </div>
+          </div>
+          <div class="watson-note-body">
+            <p>The bones here are fine. The design is clean. There's clearly a team who knows what they're doing. But the copy reads like it was written for a case study submission, not for a business owner who's been burned by overpriced SaaS, or who's lost three months waiting for a freelancer to deliver something that broke in production.</p>
+            <p>That SaaS escape calculator is the most interesting thing on the page. A $590K projected saving is a number someone actually feels. It should be above the fold. It should be the headline, frankly. Instead it's buried in the middle section, surrounded by bullet points about ERP migration.</p>
+            <p>The "Full-Stack Expertise" section with the glowing brain illustration is doing some heavy lifting visually. But the copy underneath it? "Full-stack expertise." That's not copy. That's a category. Sherlock would have a field day with this one.</p>
+            <p>I've flagged the obvious. The psychological archaeology (the exact words a skeptical CTO uses at 11pm when they finally admit they have a problem) is the other fellow's department.</p>
+          </div>
+          <div class="watson-note-footer">
+            <span class="watson-sig">- Dr. Watson</span>
+            <span>1 May 2026</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 04: FROM THE CREATOR -->
+    <section id="creator" class="section">
+      <div class="creator-section">
+        <div class="section-header">
+          <div class="section-icon" style="background:rgba(155,93,229,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--velvet-plum)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="section-num" style="color:var(--velvet-plum)">From the Creator</div>
+            <h2>Why I Built Watson and Sherlock</h2>
+          </div>
+        </div>
+        <div class="creator-card">
+          <div class="creator-header">
+            <img class="creator-avatar" id="dom-avatar" src="data:image/jpeg;base64,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" alt="Dom Jedro" />
+            <div>
+              <div class="creator-name">Dom Jedro</div>
+              <div class="creator-role">Founder, Just Digital &nbsp;&bull;&nbsp; justdigital.world</div>
+              <div class="social-links">
+                <a class="social-link li" href="https://www.linkedin.com/in/domjedro/" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  LinkedIn
+                </a>
+                <a class="social-link ig" href="https://www.instagram.com/domjedro/" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                  Instagram
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="creator-body">
+            <p>In 2012, I lost a business overnight. A Google algorithm update wiped a blog I'd built into a real revenue machine. Half a million in value. Gone. Same week I proposed to my wife, Ronja.</p>
+            <p>I spent a year teaching kindergarten in China, earning around €1,500 a month, while I worked out what had gone wrong. The SEO was fine. The content was fine. The problem was that I'd been writing for algorithms, not for buyers. When the algorithm changed, I had nothing. No relationship with readers. No language that connected to real human need.</p>
+            <p>That sent me down a different path. 16 years later, I study the gap between how founders describe their offers and how cold buyers actually think. I call it the Buyer Language Gap. It's the reason good businesses with real results still struggle to convert cold traffic.</p>
+            <p>Watson is the diagnostic layer. He finds where copy is bleeding. Sherlock is the forensic solution. He goes three layers deeper and finds the exact language that makes cold buyers lean forward.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 05: SHERLOCK CTA -->
+    <section id="sherlock" class="section">
+      <div class="sherlock-section">
+        <div class="sherlock-card">
+          <div class="sherlock-badge">Phase 2 — The Full Investigation</div>
+          <h2>I find what's broken.<br>Sherlock finds what converts.</h2>
+          <p>I've done my bit. The surface problems are flagged. But the copy this page needs goes deeper than swapping headlines. It requires knowing exactly what a skeptical CTO says to himself at 11pm when he's finally ready to admit the current system isn't working. That's Sherlock's territory.</p>
+          <div class="sherlock-bullets">
+            <div class="sherlock-bullet"><span class="bullet-dot"></span><span>Forensic mapping of exactly what your buyers think, fear, and need to hear</span></div>
+            <div class="sherlock-bullet"><span class="bullet-dot"></span><span>The exact phrases that make cold buyers say "send me the payment link"</span></div>
+            <div class="sherlock-bullet"><span class="bullet-dot"></span><span>Psychological tripwires deployed across every channel you use</span></div>
+          </div>
+          <a class="sherlock-btn" id="sherlock-link" href="#">Book the Sherlock Report</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <div class="footer-social">
+        <a class="social-link li" href="https://www.linkedin.com/in/domjedro/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          linkedin.com/in/domjedro
+        </a>
+        <a class="social-link ig" href="https://www.instagram.com/domjedro/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          instagram.com/domjedro
+        </a>
+      </div>
+      Watson Diagnostic Report &nbsp;&bull;&nbsp; Case #847293 &nbsp;&bull;&nbsp; Just Digital &nbsp;&bull;&nbsp; justdigital.world
+    </div>
+
+  </main>
+</div>
+
+<script>
+// THEME TOGGLE
+const toggle = document.getElementById('theme-toggle');
+toggle.addEventListener('click', () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  toggle.textContent = html.dataset.theme === 'dark' ? '☀️' : '🌙';
+});
+
+// SCORE RING ANIMATION
+document.addEventListener('DOMContentLoaded', () => {
+  const ring = document.querySelector('.ring-fill');
+  const score = 1.7;
+  const circumference = 326.7;
+  const offset = circumference - (score / 5) * circumference;
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 300);
+});
+
+// TRIGGER BAR ANIMATIONS
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.trigger-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = target; }, 400);
+  });
+});
+
+// SMOOTH SCROLL + ACTIVE NAV
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navItems.forEach(n => n.classList.toggle('active', n.dataset.section === id));
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// SHERLOCK MAILTO: assembled at runtime (Cloudflare fix)
+document.addEventListener('DOMContentLoaded', () => {
+  const parts = ['d','o','m','@','j','u','s','t','d','i','g','i','t','a','l','.','w','o','r','l','d'];
+  const email = parts.join('');
+  const subject = encodeURIComponent('Sherlock Report Request: Norsoft');
+  document.getElementById('sherlock-link').href = ['ma','il','to',':'].join('') + email + '?subject=' + subject;
+});
+</script>
+</body>
+</html>
