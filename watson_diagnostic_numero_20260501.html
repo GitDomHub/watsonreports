@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watson Diagnostic Report — Numero / Kamila Khayrullina</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #EEF2F7;
+      --surface: #FFFFFF;
+      --surface-hover: #F8FAFC;
+      --border: #D6DEE8;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --shadow: 0 2px 12px rgba(15,23,42,0.08), 0 0 0 1px rgba(15,23,42,0.06);
+      --hot-pink: #FF4D8D;
+      --velvet-plum: #9B5DE5;
+      --golden-honey: #FBBA2C;
+      --studio-aqua: #5CECC6;
+      --money-green: #10B981;
+      --pain-red: #EF4444;
+      --watson-blue: #4B9FE1;
+      --carbon: #475569;
+    }
+    [data-theme="dark"] {
+      --bg: #0F172A;
+      --surface: #1a2332;
+      --surface-hover: #222e42;
+      --border: #2a3749;
+      --text-primary: #E8E4DF;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    [data-theme="dark"] .header { background: rgba(15,23,42,0.92); }
+
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+    /* HEADER */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-watson-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid var(--watson-blue); filter: sepia(15%); flex-shrink: 0; }
+    .header-brand { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--text-primary); }
+    .header-center { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .header-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text-secondary); transition: all 0.15s; }
+    .header-btn:hover { border-color: var(--watson-blue); color: var(--watson-blue); }
+
+    /* LAYOUT */
+    .page-wrap { display: flex; gap: 32px; max-width: 1160px; margin: 0 auto; padding: 100px 24px 60px; }
+    .main-content { flex: 1; min-width: 0; }
+
+    /* SIDEBAR */
+    .sidebar { position: sticky; top: 88px; width: 210px; flex-shrink: 0; height: fit-content; }
+    .sidebar-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding: 0 16px 10px; }
+    .nav-item { display: block; padding: 10px 16px; border-radius: 8px; font-size: 0.84rem; color: var(--text-secondary); text-decoration: none; transition: all 0.15s; border-left: 3px solid transparent; margin-bottom: 2px; }
+    .nav-item:hover { background: var(--surface-hover); color: var(--text-primary); }
+    .nav-item.active { color: var(--hot-pink); border-left-color: var(--hot-pink); background: rgba(255,77,141,0.06); font-weight: 600; }
+    @media (max-width: 900px) { .sidebar { display: none; } }
+
+    /* CASE BANNER */
+    .case-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .case-meta { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .case-badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; background: rgba(75,159,225,0.1); color: var(--watson-blue); border: 1px solid rgba(75,159,225,0.25); }
+    .status-badge { background: rgba(16,185,129,0.1); color: var(--money-green); border-color: rgba(16,185,129,0.25); }
+    .case-banner h1 { font-family: 'League Spartan', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.02em; }
+    .pink { color: var(--hot-pink); }
+    .case-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 14px; }
+    .classification-pill { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; background: rgba(155,93,229,0.1); color: var(--velvet-plum); border: 1px solid rgba(155,93,229,0.25); }
+
+    /* SECTIONS */
+    .section { margin-bottom: 24px; }
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .section-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(75,159,225,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+    .section h2 { font-family: 'League Spartan', sans-serif; font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); }
+    .section-intro { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
+
+    /* SCORE HERO */
+    .score-hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .score-ring { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+    .score-ring svg { width: 140px; height: 140px; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .ring-fill { fill: none; stroke: var(--golden-honey); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
+    .score-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .score-num { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 500; color: var(--text-primary); display: block; line-height: 1; }
+    .score-denom { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-muted); }
+    .score-summary { flex: 1; min-width: 220px; }
+    .score-label { font-family: 'League Spartan', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--golden-honey); margin-bottom: 10px; }
+    .score-note { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; font-style: italic; border-left: 3px solid var(--watson-blue); padding-left: 14px; margin-bottom: 18px; }
+    .score-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .score-meta span { font-size: 0.78rem; font-weight: 600; padding: 5px 12px; border-radius: 100px; background: var(--surface-hover); border: 1px solid var(--border); color: var(--text-muted); }
+
+    /* SILENT DRAIN */
+    .drain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .drain-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow); }
+    .drain-card.drain-highlight { border-color: var(--money-green); background: rgba(16,185,129,0.04); }
+    .drain-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+    .drain-num { font-family: 'League Spartan', sans-serif; font-size: 2.6rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .drain-bad { color: var(--pain-red); }
+    .drain-good { color: var(--money-green); }
+    .drain-context { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px; }
+    .drain-note { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+    @media (max-width: 700px) { .drain-grid { grid-template-columns: 1fr; } }
+
+    /* TRIGGERS */
+    .triggers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .triggers-grid { grid-template-columns: 1fr; } }
+    .trigger-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; box-shadow: var(--shadow); border-left: 4px solid var(--border); transition: border-color 0.2s; }
+    .trigger-card.critical { border-left-color: var(--pain-red); }
+    .trigger-card.weak { border-left-color: var(--golden-honey); }
+    .trigger-card.strong { border-left-color: var(--money-green); }
+    .trigger-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .trigger-name { font-family: 'League Spartan', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text-primary); }
+    .trigger-score { font-family: 'JetBrains Mono', monospace; }
+    .score-digit { font-size: 1.3rem; font-weight: 500; color: var(--text-primary); }
+    .score-max { font-size: 0.8rem; color: var(--text-muted); }
+    .trigger-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 8px 0 10px; overflow: hidden; }
+    .trigger-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .trigger-card.critical .trigger-fill { background: var(--pain-red); }
+    .trigger-card.weak .trigger-fill { background: var(--golden-honey); }
+    .trigger-card.strong .trigger-fill { background: var(--money-green); }
+    .trigger-status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; margin-bottom: 10px; }
+    .critical .trigger-status-pill { background: rgba(239,68,68,0.1); color: var(--pain-red); }
+    .weak .trigger-status-pill { background: rgba(251,186,44,0.1); color: #b8860b; }
+    .strong .trigger-status-pill { background: rgba(16,185,129,0.1); color: var(--money-green); }
+    .trigger-note { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ISSUES */
+    .issue-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px 28px; box-shadow: var(--shadow); margin-bottom: 16px; }
+    .issue-num { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+    .issue-title { font-family: 'League Spartan', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--pain-red); margin-bottom: 14px; }
+    .issue-quote { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: rgba(239,68,68,0.06); border-left: 3px solid var(--pain-red); padding: 12px 16px; border-radius: 0 8px 8px 0; color: var(--text-primary); margin-bottom: 14px; line-height: 1.6; }
+    .issue-explain { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; }
+    .issue-impact { display: flex; gap: 10px; align-items: center; padding-top: 14px; border-top: 1px solid var(--border); font-size: 0.82rem; }
+    .impact-label { color: var(--text-muted); }
+    .impact-val { color: var(--watson-blue); font-weight: 600; }
+
+    /* WATSON NOTES */
+    .watson-note-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--shadow); border-left: 5px solid var(--watson-blue); }
+    .watson-note-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .watson-img-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--watson-blue); filter: sepia(15%); flex-shrink: 0; }
+    .watson-name { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text-primary); }
+    .watson-role { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+    .watson-note-body p { font-size: 0.93rem; line-height: 1.75; color: var(--text-secondary); margin-bottom: 12px; }
+    .watson-note-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 18px; border-top: 1px solid var(--border); margin-top: 4px; }
+    .watson-sig { font-style: italic; font-size: 0.88rem; color: var(--watson-blue); font-weight: 600; }
+    .watson-date { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* CREATOR */
+    .creator-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; box-shadow: var(--shadow); border-left: 5px solid var(--velvet-plum); }
+    .creator-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .creator-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--velvet-plum); flex-shrink: 0; }
+    .creator-name { font-family: 'League Spartan', sans-serif; font-weight: 800; font-size: 1.05rem; color: var(--text-primary); }
+    .creator-role { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+    .creator-body p { font-size: 0.92rem; line-height: 1.75; color: var(--text-secondary); margin-bottom: 12px; }
+    .social-links { display: flex; align-items: center; gap: 8px; margin-top: 7px; flex-wrap: wrap; }
+    .social-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.73rem; font-weight: 600; color: var(--text-muted); text-decoration: none; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); transition: all 0.15s; background: var(--surface); }
+    .social-link:hover { background: var(--surface-hover); }
+    .social-link.li:hover { border-color: #0077B5; color: #0077B5; }
+    .social-link.ig:hover { border-color: #E1306C; color: #E1306C; }
+
+    /* SHERLOCK CTA */
+    .sherlock-card { background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hover) 100%); border: 1px solid var(--border); border-radius: 20px; padding: 48px; box-shadow: var(--shadow); text-align: center; }
+    .sherlock-badge { display: inline-block; background: rgba(255,77,141,0.12); color: var(--hot-pink); border: 1px solid var(--hot-pink); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 20px; }
+    .sherlock-card h2 { font-family: 'League Spartan', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 18px; line-height: 1.2; }
+    .sherlock-card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; max-width: 520px; margin: 0 auto 22px; }
+    .sherlock-bullets { display: flex; flex-direction: column; gap: 12px; text-align: left; max-width: 460px; margin: 0 auto 32px; }
+    .sherlock-bullet { display: flex; align-items: flex-start; gap: 12px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; }
+    .bullet-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hot-pink); flex-shrink: 0; margin-top: 7px; }
+    .sherlock-btn { display: inline-block; background: var(--hot-pink); color: white; font-family: 'League Spartan', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; padding: 16px 36px; border-radius: 100px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(255,77,141,0.35); }
+    .sherlock-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,77,141,0.45); }
+
+    /* FOOTER */
+    .report-footer { text-align: center; padding: 32px 24px; font-size: 0.78rem; color: var(--text-muted); }
+    .footer-social { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-social .social-link { font-size: 0.79rem; padding: 6px 14px; }
+  </style>
+</head>
+<body>
+
+<!-- FIXED HEADER -->
+<header class="header">
+  <div class="header-left">
+    <img class="header-watson-img" src="data:image/jpeg;base64,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" alt="Watson" />
+    <span class="header-brand">WATSON</span>
+  </div>
+  <div class="header-center">Marketing Health Check &mdash; Case #847193 &mdash; 1 May 2026</div>
+  <div class="header-right">
+    <button class="header-btn" id="theme-toggle">🌙</button>
+    <button class="header-btn" onclick="window.print()">Print</button>
+  </div>
+</header>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Report Sections</div>
+    <a class="nav-item" href="#score" data-section="score">Overall Score</a>
+    <a class="nav-item" href="#drain" data-section="drain">The Silent Drain</a>
+    <a class="nav-item" href="#triggers" data-section="triggers">7 Triggers</a>
+    <a class="nav-item" href="#issues" data-section="issues">Issues Found</a>
+    <a class="nav-item" href="#notes" data-section="notes">Watson's Notes</a>
+    <a class="nav-item" href="#creator" data-section="creator">From the Creator</a>
+    <a class="nav-item" href="#sherlock" data-section="sherlock">Next Step: Sherlock</a>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- CASE BANNER -->
+    <div class="case-banner">
+      <div class="case-meta">
+        <span class="case-badge">Case #847193 &mdash; 1 May 2026</span>
+        <span class="case-badge status-badge">Diagnostic Complete</span>
+      </div>
+      <h1>Copy Analysis: <span class="pink">Numero / Kamila Khayrullina</span></h1>
+      <p class="case-desc">Submitted by Dom Jedro &middot; Landing page + LinkedIn bio + new product launch</p>
+      <div class="classification-pill">Psychological Conversion Audit &mdash; 7 Triggers</div>
+    </div>
+
+    <!-- SCORE -->
+    <section id="score" class="section">
+      <div class="score-hero-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+          </svg>
+          <div class="score-inner">
+            <span class="score-num">2.1</span>
+            <span class="score-denom">/5.0</span>
+          </div>
+        </div>
+        <div class="score-summary">
+          <div class="score-label">Needs Work</div>
+          <p class="score-note">"Competent. Tidy. Forgettable. Which, as it happens, is the most expensive kind of copy there is."</p>
+          <div class="score-meta">
+            <span>3 issues found</span>
+            <span>4 triggers in critical range</span>
+            <span>Landing page + bio submitted</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SILENT DRAIN -->
+    <section id="drain" class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--watson-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><polyline points="12,6 12,12 16,14"/></svg>
+        </div>
+        <div>
+          <div class="section-num">Section 00</div>
+          <h2>The Silent Drain</h2>
+        </div>
+      </div>
+      <p class="section-intro">If 200 relevant founders land on Numero's homepage this month and it converts at 1% instead of a realistic 3% with sharper buyer language, that's 4 clients who didn't book. At Kamila's retainer rates (roughly $2,000/month per client), that's $96,000 in annual revenue leaking out through copy that describes services instead of solving fears.</p>
+      <div class="drain-grid">
+        <div class="drain-card">
+          <div class="drain-label">Current (Generic Copy)</div>
+          <div class="drain-num drain-bad">$96K</div>
+          <div class="drain-context">estimated annual silent leak</div>
+          <p class="drain-note">At 1% conversion on 200 monthly visitors with a $2K/month retainer, 4 missed clients per month compounding over 12 months is $96K staying in founders' pockets instead of Kamila's.</p>
+        </div>
+        <div class="drain-card drain-highlight">
+          <div class="drain-label">With Buyer Language Copy</div>
+          <div class="drain-num drain-good">$48K+</div>
+          <div class="drain-context">recoverable revenue per year</div>
+          <p class="drain-note">Moving from 1% to 2% conversion recovers 2 clients per month. That's $48K annually. Moving to 3% doubles it. The math is conservative. The copy gap is not.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 TRIGGERS -->
+    <section id="triggers" class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--watson-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <div>
+          <div class="section-num">Section 01</div>
+          <h2>7 Psychological Triggers</h2>
+        </div>
+      </div>
+      <div class="triggers-grid">
+
+        <div class="trigger-card critical">
+          <div class="trigger-top">
+            <div class="trigger-name">Emotional Trigger Strength</div>
+            <div class="trigger-score"><span class="score-digit">2</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:40%"></div></div>
+          <div class="trigger-status-pill">🔴 Critical</div>
+          <p class="trigger-note">The copy describes what Numero does. It doesn't touch how a founder feels at 11pm staring at a P&L they can't read. That gap is where buyers make decisions.</p>
+        </div>
+
+        <div class="trigger-card critical">
+          <div class="trigger-top">
+            <div class="trigger-name">Buyer Language Accuracy</div>
+            <div class="trigger-score"><span class="score-digit">2</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:40%"></div></div>
+          <div class="trigger-status-pill">🔴 Critical</div>
+          <p class="trigger-note">Founders don't say "managerial accounting function." They say "I have no idea where my money is going." The copy speaks Kamila's language, not theirs.</p>
+        </div>
+
+        <div class="trigger-card weak">
+          <div class="trigger-top">
+            <div class="trigger-name">Pain Point Clarity</div>
+            <div class="trigger-score"><span class="score-digit">3</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:60%"></div></div>
+          <div class="trigger-status-pill">🟡 Weak</div>
+          <p class="trigger-note">The LinkedIn bio names real pains (P&Ls that don't support decisions, cash blind spots). The homepage doesn't match that energy. Inconsistency costs trust.</p>
+        </div>
+
+        <div class="trigger-card weak">
+          <div class="trigger-top">
+            <div class="trigger-name">Identity Confirmation</div>
+            <div class="trigger-score"><span class="score-digit">3</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:60%"></div></div>
+          <div class="trigger-status-pill">🟡 Weak</div>
+          <p class="trigger-note">"Companies with monthly revenue from $50K to $5M" is a size filter, not an identity. The buyer needs to feel seen. "You're great at building. The numbers terrify you." That's identity confirmation.</p>
+        </div>
+
+        <div class="trigger-card critical">
+          <div class="trigger-top">
+            <div class="trigger-name">Psychological Tripwire Activation</div>
+            <div class="trigger-score"><span class="score-digit">1</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:20%"></div></div>
+          <div class="trigger-status-pill">🔴 Critical</div>
+          <p class="trigger-note">No urgency. No "what happens if you don't fix this" moment. No loss framing. The homepage asks for a call without earning the click.</p>
+        </div>
+
+        <div class="trigger-card weak">
+          <div class="trigger-top">
+            <div class="trigger-name">Trust Signal Density</div>
+            <div class="trigger-score"><span class="score-digit">3</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:60%"></div></div>
+          <div class="trigger-status-pill">🟡 Weak</div>
+          <p class="trigger-note">Four case studies and a 100% retention rate are excellent. They're buried. And the case study headlines ("Manufacturing Company", "IT Outsourcing") strip out the proof that would actually land.</p>
+        </div>
+
+        <div class="trigger-card critical">
+          <div class="trigger-top">
+            <div class="trigger-name">Urgency / Consequence Framing</div>
+            <div class="trigger-score"><span class="score-digit">1</span><span class="score-max">/5</span></div>
+          </div>
+          <div class="trigger-bar"><div class="trigger-fill" style="width:20%"></div></div>
+          <div class="trigger-status-pill">🔴 Critical</div>
+          <p class="trigger-note">Nothing tells the founder what it costs to keep winging it. Without a "here's what stays broken if you don't act" line, there's no reason to book the call today instead of next quarter.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ISSUES FOUND -->
+    <section id="issues" class="section">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--pain-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="section-num">Section 02</div>
+          <h2>Issues Found</h2>
+        </div>
+      </div>
+
+      <div class="issue-card">
+        <div class="issue-num">Issue #1</div>
+        <div class="issue-title">The Headline Describes the Delivery, Not the Desire</div>
+        <div class="issue-quote">"Numero — Outsourced Finance Department. End-to-end financial services: accounting, analysis, and strategy — delivered by a team with 25+ years of experience."</div>
+        <p class="issue-explain">This tells the buyer what they're buying. It doesn't tell them what changes in their life when they buy it. The founder arriving at this page doesn't want an outsourced finance department. They want to stop being afraid every time someone asks them about their margins. The headline is talking about the product. It should be talking about the transformation.</p>
+        <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Emotional Trigger Strength + Buyer Language Accuracy</span></div>
+      </div>
+
+      <div class="issue-card">
+        <div class="issue-num">Issue #2</div>
+        <div class="issue-title">The Case Studies Strip Out the Proof That Would Actually Sell</div>
+        <div class="issue-quote">"01 Manufacturing Company — We implemented a management accounting system and trained the internal team on ongoing data supervision."</div>
+        <p class="issue-explain">That tells me what Numero did. It doesn't tell me what the founder felt when they finally understood their numbers, or what decision they made that they couldn't make before. The prospect reading this is looking for someone who's solved their specific problem. Generic industry labels and process descriptions don't create that recognition. Real outcomes with real numbers do.</p>
+        <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Trust Signal Density + Psychological Tripwire Activation</span></div>
+      </div>
+
+      <div class="issue-card">
+        <div class="issue-num">Issue #3</div>
+        <div class="issue-title">The "Financial Clarity" Product Launch Has No Psychological Hook</div>
+        <div class="issue-quote">"I'm currently launching a new financial clarity product designed for founders who want to confidently work with their P&L and CashFlow without becoming finance experts themselves."</div>
+        <p class="issue-explain">The idea is strong. The copy is thin. "Confidently work with your P&L" is still founder language. The buyer's version sounds more like: "Finally understand whether you can afford to hire that person without having a panic attack about it." The early-50%-off offer is buried after a paragraph of credentials. The offer needs its own page, its own psychology, and its own copy that speaks the buyer's fear back to them before asking for commitment.</p>
+        <div class="issue-impact"><span class="impact-label">Trigger affected:</span><span class="impact-val">Urgency / Consequence Framing + Buyer Language Accuracy</span></div>
+      </div>
+
+    </section>
+
+    <!-- WATSON'S NOTES -->
+    <section id="notes" class="section">
+      <div class="watson-note-card">
+        <div class="watson-note-header">
+          <img class="watson-img-avatar" src="data:image/jpeg;base64,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" alt="Watson"/>
+          <div>
+            <div class="watson-name">Watson</div>
+            <div class="watson-role">Copy Diagnostician &middot; Just Digital</div>
+          </div>
+        </div>
+        <div class="watson-note-body">
+          <p>Kamila has something most people who land on this sort of homepage don't: real results, real retention numbers, and a genuinely useful service. That's the good news.</p>
+          <p>The bad news is that none of it comes through in the copy. The homepage reads like it was written to reassure a bank, not a founder who's terrified their business is bleeding cash they can't see. It's accurate. It's professional. And cold traffic won't give it a second glance.</p>
+          <p>The "Financial Clarity" product is the real opportunity here. The idea is excellent. The concept of helping founders understand their own numbers without becoming accountants is exactly what the market wants. But it needs its own page, its own copy, and its own Sherlock report to find out what that specific buyer is actually afraid of before they'll hand over a credit card.</p>
+          <p>I've flagged the obvious. The deeper stuff — what phrases Kamila's buyers use at 11pm when they're staring at the numbers — that's not my department.</p>
+        </div>
+        <div class="watson-note-footer">
+          <span class="watson-sig">- Dr. Watson</span>
+          <span class="watson-date">1 May 2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FROM THE CREATOR -->
+    <section id="creator" class="section">
+      <div class="creator-card">
+        <div class="creator-header">
+          <img class="creator-avatar" src="data:image/jpeg;base64,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" alt="Dom Jedro"/>
+          <div>
+            <div class="creator-name">Dom Jedro</div>
+            <div class="creator-role">Founder, Just Digital &middot; B2B Content & Messaging Consultant</div>
+            <div class="social-links">
+              <a class="social-link li" href="https://www.linkedin.com/in/domjedro/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                linkedin.com/in/domjedro
+              </a>
+              <a class="social-link ig" href="https://www.instagram.com/domjedro/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                @domjedro
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="creator-body">
+          <p>In 2012 I lost a €500K business overnight to a Google algorithm update. Same week I proposed to my wife. I spent the next year teaching kindergarten in China for €1,500 a month, trying to figure out what went wrong.</p>
+          <p>What I realised was that I'd been writing for algorithms. Not for people. And specifically, not in the language real buyers use when they're scared, stuck, or quietly searching for something that actually helps.</p>
+          <p>That's why I built Watson and Sherlock. Watson spots what's visibly broken in your copy. Sherlock goes three layers deeper and finds the exact words your buyers use when they're ready to say yes. Together, they replace guesswork with forensic buyer psychology.</p>
+          <p>Kamila's situation is a good example of what Watson finds all the time: a genuinely excellent service, buried under copy that speaks to no one's actual fears. The "Financial Clarity" product in particular needs its own Sherlock report before launch. The difference between mediocre conversion and a product that sells itself is almost always in the language. Get that right first.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHERLOCK CTA -->
+    <section id="sherlock" class="section">
+      <div class="sherlock-card">
+        <div class="sherlock-badge">Phase 2 &mdash; The Full Investigation</div>
+        <h2>I find what's broken.<br>Sherlock finds what converts.</h2>
+        <p>Look, I've done what I can here. Spotted the surface problems, flagged the gaps. But the psychological tripwires hiding three layers down? The exact phrases Kamila's buyers use when they're ready to pull out their credit card? That's Sherlock's department. I find what's broken. He finds what converts.</p>
+        <div class="sherlock-bullets">
+          <div class="sherlock-bullet"><span class="bullet-dot"></span><span>Forensic mapping of exactly what your buyers think, fear, and need to hear before they trust anyone with their numbers</span></div>
+          <div class="sherlock-bullet"><span class="bullet-dot"></span><span>The exact phrases that make cold founders say "send me the payment link" for the Financial Clarity product</span></div>
+          <div class="sherlock-bullet"><span class="bullet-dot"></span><span>Psychological tripwires deployed across homepage, product launch page, and LinkedIn bio — all in buyer language</span></div>
+        </div>
+        <a class="sherlock-btn" id="sherlock-link" href="#">Book the Sherlock Report</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <div class="footer-social">
+        <a class="social-link li" href="https://www.linkedin.com/in/domjedro/" target="_blank" rel="noopener">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          linkedin.com/in/domjedro
+        </a>
+        <a class="social-link ig" href="https://www.instagram.com/domjedro/" target="_blank" rel="noopener">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          @domjedro
+        </a>
+      </div>
+      Watson Diagnostic Report &middot; Case #847193 &middot; Just Digital &middot; justdigital.world
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /page-wrap -->
+
+<script>
+// Theme toggle
+const toggle = document.getElementById('theme-toggle');
+toggle.addEventListener('click', () => {
+  const html = document.documentElement;
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  toggle.textContent = html.dataset.theme === 'dark' ? '☀️' : '🌙';
+});
+
+// Score ring animation
+document.addEventListener('DOMContentLoaded', () => {
+  const ring = document.querySelector('.ring-fill');
+  const score = 2.1;
+  const circumference = 326.7;
+  const offset = circumference - (score / 5) * circumference;
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 300);
+});
+
+// Trigger bar animations
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.trigger-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = target; }, 400);
+  });
+});
+
+// Smooth scroll + active nav
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navItems.forEach(n => n.classList.toggle('active', n.dataset.section === id));
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// Sherlock mailto — assembled at runtime (Cloudflare fix)
+document.addEventListener('DOMContentLoaded', () => {
+  const parts = ['d','o','m','@','j','u','s','t','d','i','g','i','t','a','l','.','w','o','r','l','d'];
+  const email = parts.join('');
+  const subject = encodeURIComponent('Sherlock Report Request — Numero');
+  document.getElementById('sherlock-link').href = ['ma','il','to',':'].join('') + email + '?subject=' + subject;
+});
+</script>
+</body>
+</html>
